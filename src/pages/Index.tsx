@@ -1,16 +1,52 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { data } from "@/mock/dashboardData";
+import HeaderCard from "@/components/HeaderCard";
+import EventTabs from "@/components/EventTabs";
+import OtpDisplay from "@/components/OtpDisplay";
+import EventOverview from "@/components/EventOverview";
+import PaymentSection from "@/components/PaymentSection";
+import FilesSection from "@/components/FilesSection";
+import RatingSection from "@/components/RatingSection";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const [selectedEventId, setSelectedEventId] = useState(data.events[0].id);
+  const selectedEvent = data.events.find((e) => e.id === selectedEventId) || data.events[0];
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="mx-auto min-h-screen max-w-lg bg-background pb-8">
+      <HeaderCard
+        clientName={data.client.name}
+        occasionType={selectedEvent.occasionType}
+        poc={selectedEvent.poc}
+        status={selectedEvent.status}
+        tncAccepted={data.client.tncAccepted}
+      />
+
+      <EventTabs
+        events={data.events}
+        selectedId={selectedEventId}
+        onSelect={setSelectedEventId}
+      />
+
+      <OtpDisplay startOtp="5558" endOtp="3344" />
+
+      <EventOverview
+        details={data.selectedEvent.details}
+        eventName={selectedEvent.name}
+        eventDate={selectedEvent.date}
+        meta={data.selectedEvent.meta}
+      />
+
+      <PaymentSection payments={data.selectedEvent.payments} />
+
+      <FilesSection
+        files={data.selectedEvent.files}
+        meta={data.selectedEvent.meta}
+      />
+
+      <RatingSection rating={data.selectedEvent.rating} />
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
