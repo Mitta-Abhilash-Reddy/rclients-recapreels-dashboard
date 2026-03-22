@@ -1,20 +1,11 @@
 import { useState } from "react";
 import { Film, Image, FileText, ChevronDown, ChevronUp, Clock } from "lucide-react";
 import FileCard from "./FileCard";
-
-interface FileItem {
-  name: string;
-  url: string;
-  thumbnail?: string;
-}
+import { EventFiles, EventMeta } from "@/types/dashboard";
 
 interface FilesSectionProps {
-  files: {
-    reels: FileItem[];
-    pictures: FileItem[];
-    raw: FileItem[];
-  };
-  meta: { startTime: string; endTime: string; duration: string };
+  files: EventFiles;
+  meta: EventMeta;
 }
 
 const FilesSection = ({ files, meta }: FilesSectionProps) => {
@@ -71,10 +62,16 @@ const FilesSection = ({ files, meta }: FilesSectionProps) => {
               {reelsOpen ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
             </button>
             {reelsOpen && (
-              <div className="border-t border-border p-3 grid grid-cols-2 gap-3">
-                {files.reels.length > 0 ? files.reels.map((f, i) => (
-                  <FileCard key={i} file={f} type="reel" />
-                )) : <p className="col-span-2 text-center text-sm text-muted-foreground py-4">No reels yet</p>}
+              <div className="border-t border-border p-3">
+                {files.reels.length === 0 ? (
+                  <p className="text-center text-sm text-muted-foreground py-4">No reels uploaded yet</p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {files.reels.map((f) => (
+                      <FileCard key={f.id} file={f} type="reel" />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -87,7 +84,15 @@ const FilesSection = ({ files, meta }: FilesSectionProps) => {
             </button>
             {picturesOpen && (
               <div className="border-t border-border p-3">
-                <p className="text-center text-sm text-muted-foreground py-4">No pictures yet</p>
+                {files.pictures.length === 0 ? (
+                  <p className="text-center text-sm text-muted-foreground py-4">No pictures uploaded yet</p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {files.pictures.map((f) => (
+                      <FileCard key={f.id} file={f} type="picture" />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -100,7 +105,15 @@ const FilesSection = ({ files, meta }: FilesSectionProps) => {
             </button>
             {rawOpen && (
               <div className="border-t border-border p-3">
-                <p className="text-center text-sm text-muted-foreground py-4">No raw content yet</p>
+                {files.raw.length === 0 ? (
+                  <p className="text-center text-sm text-muted-foreground py-4">No raw files uploaded yet</p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {files.raw.map((f) => (
+                      <FileCard key={f.id} file={f} type="raw" />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>

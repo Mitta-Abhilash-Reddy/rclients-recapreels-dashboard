@@ -1,9 +1,10 @@
 import { Phone, User, CheckCircle2 } from "lucide-react";
+import { CompleteEvent } from "@/types/dashboard";
 
 interface HeaderCardProps {
   clientName: string;
   occasionType: string;
-  poc: { name: string; phone: string };
+  poc: CompleteEvent["poc"];
   status: string;
   tncAccepted: boolean;
 }

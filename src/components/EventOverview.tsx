@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { Calendar, MapPin, Music, Info, User, Phone, Pencil, Save, ChevronDown, ChevronUp } from "lucide-react";
+import { EventDetails, EventMeta } from "@/types/dashboard";
 
 interface EventOverviewProps {
-  details: {
-    description: string;
-    musicPreferences: string;
-    locationLink: string;
-    clientPoc: { name: string; phone: string };
-  };
+  details: EventDetails;
   eventName: string;
   eventDate: string;
-  meta: { startTime: string; endTime: string; duration: string };
+  meta: EventMeta;
 }
 
 const EventOverview = ({ details, eventName, eventDate, meta }: EventOverviewProps) => {
@@ -38,13 +34,13 @@ const EventOverview = ({ details, eventName, eventDate, meta }: EventOverviewPro
         <div className="border-t border-border px-5 pb-5 pt-4">
           <div className="rounded-md border border-border bg-background p-4">
             <p className="flex items-center gap-2 text-sm font-semibold">
-              <Music className="h-4 w-4 text-primary" /> {eventName}
+              <Music className="h-4 w-4 text-primary" /> {eventName || "Unnamed Event"}
             </p>
             <p className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
               <Calendar className="h-3.5 w-3.5" />
-              {new Date(eventDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+              {eventDate ? new Date(eventDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "No Date"}
               {" · "}
-              {meta.startTime} – {meta.endTime}
+              {meta?.startTime || "-"} – {meta?.endTime || "-"}
             </p>
 
             <div className="mt-5 space-y-4">
@@ -66,7 +62,9 @@ const EventOverview = ({ details, eventName, eventDate, meta }: EventOverviewPro
                     rows={2}
                   />
                 ) : (
-                  <p className="mt-1 rounded-md border border-border bg-muted/50 px-3 py-2 text-sm">{form.description}</p>
+                  <p className="mt-1 rounded-md border border-border bg-muted/50 px-3 py-2 text-sm">
+                    {form.description || "No description available"}
+                  </p>
                 )}
               </div>
 
@@ -82,7 +80,7 @@ const EventOverview = ({ details, eventName, eventDate, meta }: EventOverviewPro
                     className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                 ) : (
-                  <p className="mt-1 text-sm">{form.musicPreferences || "No music preferences added"}</p>
+                  <p className="mt-1 text-sm">{form.musicPreferences || "No music preferences available"}</p>
                 )}
               </div>
 
@@ -91,14 +89,18 @@ const EventOverview = ({ details, eventName, eventDate, meta }: EventOverviewPro
                 <p className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
                   <MapPin className="h-3.5 w-3.5" /> Event Location
                 </p>
-                <a
-                  href={form.locationLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-1 inline-block truncate rounded-md bg-muted/50 px-3 py-2 text-sm text-primary hover:underline"
-                >
-                  {form.locationLink}
-                </a>
+                {form.locationLink ? (
+                  <a
+                    href={form.locationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-block truncate rounded-md bg-muted/50 px-3 py-2 text-sm text-primary hover:underline"
+                  >
+                    {form.locationLink}
+                  </a>
+                ) : (
+                  <p className="mt-1 text-sm text-muted-foreground">No location link available</p>
+                )}
               </div>
 
               {/* Client POC */}
@@ -107,8 +109,8 @@ const EventOverview = ({ details, eventName, eventDate, meta }: EventOverviewPro
                   <User className="h-3.5 w-3.5" /> Point of Contact
                 </p>
                 <div className="mt-2 flex items-center gap-3 text-sm">
-                  <span className="flex items-center gap-1"><User className="h-3.5 w-3.5 text-primary" /> {form.clientPoc.name}</span>
-                  <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5 text-primary" /> {form.clientPoc.phone}</span>
+                  <span className="flex items-center gap-1"><User className="h-3.5 w-3.5 text-primary" /> {form.clientPoc?.name || "-"}</span>
+                  <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5 text-primary" /> {form.clientPoc?.phone || "-"}</span>
                 </div>
               </div>
 

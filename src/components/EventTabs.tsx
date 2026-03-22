@@ -1,12 +1,7 @@
-interface EventItem {
-  id: string;
-  name: string;
-  date: string;
-  status: string;
-}
+import { EventListItem } from "@/types/dashboard";
 
 interface EventTabsProps {
-  events: EventItem[];
+  events: EventListItem[];
   selectedId: string;
   onSelect: (id: string) => void;
 }
